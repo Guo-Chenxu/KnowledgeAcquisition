@@ -1,0 +1,100 @@
+.SearchResults {
+  padding: 20px;
+  margin: auto;
+  max-width: 900px;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  font-size: 16px;
+  color: #333;
+}
+
+.SearchResultItem {
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  transition: box-shadow 0.3s ease;
+}
+
+.SearchResultItem:hover {
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+.SearchResultItem h2 {
+  margin-top: 0;
+  color: #007aff;
+  cursor: pointer;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+}
+
+.SearchResultItem p {
+  white-space: pre-line;
+  color: #666;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+}
+
+.SearchResultItem-unfold {
+  cursor: pointer;
+}
+
+button.feedback {
+  width: auto;
+  border: none;
+  background-color: #007aff;
+  color: #fff;
+  border-radius: 8px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button.feedback:hover {
+  background-color: #0051d6;
+}
+
+.maxWidthCell {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+input {
+  padding: 18px;
+  width: 30%;
+  height: 15px;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  font-size: 1rem;
+  color: #333;
+}
+
+button.regex {
+  width: auto;
+  padding: 11px;
+  border: none;
+  background-color: #007aff;
+  color: #fff;
+  border-radius: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button.regex:hover {
+  background-color: #0051d6;
+}

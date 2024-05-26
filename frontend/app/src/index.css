@@ -1,0 +1,52 @@
+body {
+  margin: 0;
+  background-color: #282c34;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+  border-radius: 6px;
+  border: 1px solid #21262d; /* border color slightly darker than the background */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+pre {
+  padding: 16px;
+  overflow: auto;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+  background-color: #2f363d; /* dark gray similar to GitHub Dark Mode */
+  border-radius: 6px;
+  border: 1px solid #21262d; /* border color slightly darker than the background */
+  color: #8b949e; /* light gray text color similar to GitHub Dark Mode */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+a {
+  color: #007aff;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
+
+a:hover {
+  color: #34c9eb;
+}
+
+a:active {
+  color: #34c9eb;
+}
+
+a:focus {
+  outline: none;
+}

@@ -1,0 +1,60 @@
+.SearchBox {
+  margin: 20px auto;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+}
+
+.SearchBox form {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.SearchBox input {
+  padding: 18px;
+  width: 85%;
+  height: 50px;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  font-size: 1rem;
+  color: #333;
+}
+
+.SearchBox input[type="file"] {
+  max-width: auto;
+  /* display: none; */
+  width: 85%;
+  min-height: 50px;
+  border: none;
+  background-color: #ffffff;
+  color: #000;
+  border-radius: 30px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.SearchBox button {
+  max-width: auto;
+  min-width: 80px;
+  border: none;
+  margin-left: 10px;
+  background-color: #007aff;
+  color: #fff;
+  border-radius: 25px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.SearchBox button:hover {
+  background-color: #0051d6;
+}
