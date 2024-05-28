@@ -1,9 +1,9 @@
 package main
 
 import (
-	"KnowledgeAcquisition/util"
 	"KnowledgeAcquisition/logic"
 	"KnowledgeAcquisition/model"
+	"KnowledgeAcquisition/util"
 	"os"
 	"strconv"
 
@@ -137,6 +137,8 @@ func main() {
 
 		c.JSON(200, gin.H{"message": "Feedback for " + feedback.Entity + "received successfully"})
 	})
+
+	// todo 添加一个更加词性和正则匹配单词的接口，词性就用python模型提取的词性，python也要加接口，不过应该好改
 
 	r.Run(":9011")
 }

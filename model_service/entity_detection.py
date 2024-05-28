@@ -6,12 +6,13 @@ nlp_en = spacy.load("en_core_web_sm")
 
 
 def entity_detect(text: str, language: str) -> str:
+    entities = ""
     if language == "en":
         entities = en_entity_detect(text)
-        return entities
     elif language == "cn":
         entities = cn_entity_detect(text)
-        return entities
+    print(f"entities: {entities}")
+    return entities
 
 
 def en_entity_detect(text: str) -> str:
