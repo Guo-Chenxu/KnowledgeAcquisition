@@ -1,4 +1,4 @@
-package maria_types
+package model
 
 type Document struct {
 	Id       string `json:"id"`

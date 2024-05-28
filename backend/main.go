@@ -1,9 +1,9 @@
 package main
 
 import (
-	"MariaInfoRetrieval/data_process"
-	"MariaInfoRetrieval/maria_types"
-	"MariaInfoRetrieval/query_process"
+	"KnowledgeAcquisition/util"
+	"KnowledgeAcquisition/logic"
+	"KnowledgeAcquisition/model"
 	"os"
 	"strconv"
 
@@ -29,15 +29,15 @@ func main() {
 	defaultResultsPerPage := 10
 
 	// Load and index documents
-	docs, err := data_process.LoadDocuments("./data")
+	docs, err := util.LoadDocuments("./data")
 	if err != nil {
 		log.Errorf("Failed to load documents: %v", err)
 		return
 	}
-	query_process.BuildIndex(docs)
+	logic.BuildIndex(docs)
 
 	r.GET("/search", func(c *gin.Context) {
-		result, err := query_process.PerformSearch(c.Query("q"), c.Query("page"), c.DefaultQuery("limit", strconv.Itoa(defaultResultsPerPage)))
+		result, err := logic.PerformSearch(c.Query("q"), c.Query("page"), c.DefaultQuery("limit", strconv.Itoa(defaultResultsPerPage)))
 		if err != nil {
 			c.JSON(result.Code, err.Error())
 			return
@@ -50,7 +50,7 @@ func main() {
 	r.GET("/document", func(c *gin.Context) {
 		id := c.Query("id")
 		// Search for the document with the given id in docs
-		doc, found := query_process.GetFullDoc(id)
+		doc, found := logic.GetFullDoc(id)
 		if !found {
 			c.JSON(404, gin.H{"error": "Document" + id + " not found"})
 			return
@@ -63,19 +63,19 @@ func main() {
 	r.POST("/search_by_image", func(c *gin.Context) {
 		file, _ := c.FormFile("image")
 		// Save file to the server
-		dst := "/tmp/MariaInfoRetrieval/" + file.Filename
+		dst := "/tmp/KnowledgeAcquisition/" + file.Filename
 		c.SaveUploadedFile(file, dst)
 
 		// Call a function to send this image to the python service, and get
 		// back the keywords
-		keywords, err := query_process.GetKeywordsFromImage(dst)
+		keywords, err := logic.GetKeywordsFromImage(dst)
 		if err != nil {
 			c.JSON(500, gin.H{"error": err.Error()})
 			return
 		}
 
 		// Then use these keywords to perform a search
-		result, err := query_process.PerformSearch(keywords, strconv.Itoa(1), strconv.Itoa(defaultResultsPerPage))
+		result, err := logic.PerformSearch(keywords, strconv.Itoa(1), strconv.Itoa(defaultResultsPerPage))
 		if err != nil {
 			c.JSON(result.Code, err.Error())
 			return
@@ -88,7 +88,7 @@ func main() {
 		doc_id := c.Query("id")
 
 		// Extract entities and hot words
-		result, err := query_process.ExtractInfo(doc_id)
+		result, err := logic.ExtractInfo(doc_id)
 		if err != nil {
 			c.JSON(500, err.Error())
 			return
@@ -98,7 +98,7 @@ func main() {
 
 	// Handle feedback
 	r.POST("/feedback", func(c *gin.Context) {
-		var feedback maria_types.Feedback
+		var feedback model.Feedback
 		if err := c.BindJSON(&feedback); err != nil {
 			c.JSON(400, gin.H{"error": "Failed to parse request body: " + err.Error()})
 			return
@@ -112,7 +112,7 @@ func main() {
 
 	// Handle entity feedback
 	r.POST("/entity_feedback", func(c *gin.Context) {
-		var feedback maria_types.EntityFeedback
+		var feedback model.EntityFeedback
 		if err := c.BindJSON(&feedback); err != nil {
 			c.JSON(400, gin.H{"error": "Failed to parse request body: " + err.Error()})
 			return
@@ -126,7 +126,7 @@ func main() {
 
 	// Handle hot word feedback
 	r.POST("/hotword_feedback", func(c *gin.Context) {
-		var feedback maria_types.EntityFeedback
+		var feedback model.EntityFeedback
 		if err := c.BindJSON(&feedback); err != nil {
 			c.JSON(400, gin.H{"error": "Failed to parse request body: " + err.Error()})
 			return

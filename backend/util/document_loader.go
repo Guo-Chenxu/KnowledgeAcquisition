@@ -1,7 +1,7 @@
-package data_process
+package util
 
 import (
-	. "MariaInfoRetrieval/maria_types"
+	. "KnowledgeAcquisition/model"
 	"encoding/json"
 	"io/ioutil"
 	"os"

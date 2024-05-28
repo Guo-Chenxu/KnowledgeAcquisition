@@ -1,7 +1,7 @@
-package query_process
+package logic
 
 import (
-	. "MariaInfoRetrieval/maria_types"
+	"KnowledgeAcquisition/model"
 	"container/list"
 	"sync"
 )
@@ -16,7 +16,7 @@ type Cache struct {
 
 type Entry struct {
 	key   string
-	value []SearchResult
+	value []model.SearchResult
 }
 
 // Create a new cache
@@ -29,7 +29,7 @@ func NewCache(capacity int) *Cache {
 }
 
 // Retrieve an item from cache
-func (c *Cache) Get(key string) ([]SearchResult, bool) {
+func (c *Cache) Get(key string) ([]model.SearchResult, bool) {
 	c.Mu.Lock()
 	defer c.Mu.Unlock()
 
@@ -41,7 +41,7 @@ func (c *Cache) Get(key string) ([]SearchResult, bool) {
 	return nil, false
 }
 
-func (c *Cache) Set(key string, val []SearchResult) {
+func (c *Cache) Set(key string, val []model.SearchResult) {
 	c.Mu.Lock()
 	defer c.Mu.Unlock()
 

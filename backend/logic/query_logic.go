@@ -1,4 +1,4 @@
-package query_process
+package logic
 
 import (
 	"fmt"

@@ -1,6 +1,7 @@
-package query_process
+package logic
 
 import (
+	"KnowledgeAcquisition/model"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -40,7 +41,7 @@ func GetKeywordsFromImage(imagePath string) (string, error) {
 	w.Close()
 
 	// Now that you have a form, you can submit it to your handler
-	req, err := http.NewRequest("POST", python_server_url+"/image_to_keywords", &b)
+	req, err := http.NewRequest("POST", model.PYTHON_SERVER_URL+"/image_to_keywords", &b)
 	if err != nil {
 		log.Error(err.Error())
 		return "", err

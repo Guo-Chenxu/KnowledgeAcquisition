@@ -1,7 +1,7 @@
-package query_process
+package logic
 
 import (
-	. "MariaInfoRetrieval/maria_types"
+	"KnowledgeAcquisition/model"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -11,8 +11,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func ExtractInfo(doc_id string) (DocumentAbstract, error) {
-	var result DocumentAbstract
+func ExtractInfo(doc_id string) (model.DocumentAbstract, error) {
+	var result model.DocumentAbstract
 
 	doc, ok := idDocMap[doc_id]
 	if !ok {
@@ -21,9 +21,9 @@ func ExtractInfo(doc_id string) (DocumentAbstract, error) {
 	data := map[string]string{"text": doc.Keywords, "language": doc.Lang.String()}
 	jsonData, _ := json.Marshal(data)
 
-	resp, err := http.Post(python_server_url+"/extract_info", "application/json", bytes.NewBuffer(jsonData))
+	resp, err := http.Post(model.PYTHON_SERVER_URL+"/extract_info", "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
-		return DocumentAbstract{}, err
+		return model.DocumentAbstract{}, err
 	}
 	defer resp.Body.Close()
 
@@ -34,9 +34,9 @@ func ExtractInfo(doc_id string) (DocumentAbstract, error) {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			log.Error(err.Error())
-			return DocumentAbstract{}, err
+			return model.DocumentAbstract{}, err
 		}
-		return DocumentAbstract{}, errors.New(string(body))
+		return model.DocumentAbstract{}, errors.New(string(body))
 	}
 
 	log.Debug("Extract info for doc ", doc_id, " entities: ", result.Entities, " hot_words: ", result.HotWords)

@@ -59,6 +59,7 @@ hs_err_pid*
 replay_pid*
 
 .history
+.history/
 
 **/__pycache__/
 

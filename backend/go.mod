@@ -1,4 +1,4 @@
-module MariaInfoRetrieval
+module KnowledgeAcquisition
 
 go 1.20
 

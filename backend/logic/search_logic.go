@@ -1,7 +1,7 @@
-package query_process
+package logic
 
 import (
-	. "MariaInfoRetrieval/maria_types"
+	"KnowledgeAcquisition/model"
 	"errors"
 	"fmt"
 	"strconv"
@@ -13,23 +13,23 @@ import (
 var cache_capacity = 10
 var cache = NewCache(cache_capacity)
 
-func PerformSearch(q string, page string, resultsPerPage string) (r SearchResponse, err error) {
+func PerformSearch(q string, page string, resultsPerPage string) (r model.SearchResponse, err error) {
 	cacheKey := fmt.Sprintf("%s-%s-%s", q, page, resultsPerPage)
 
 	// Return if hit cache
 	if cachedResults, found := cache.Get(cacheKey); found {
-		return SearchResponse{Code: 200, Results: cachedResults}, nil
+		return model.SearchResponse{Code: 200, Results: cachedResults}, nil
 	}
 
 	// Else search
 	intPage, err := strconv.Atoi(page)
 	if err != nil {
-		return SearchResponse{Code: 400}, errors.New("Invalid page number")
+		return model.SearchResponse{Code: 400}, errors.New("invalid page number")
 	}
 
 	intResultsPerPage, err := strconv.Atoi(resultsPerPage)
 	if err != nil {
-		return SearchResponse{Code: 400}, errors.New("Invalid number of results per page")
+		return model.SearchResponse{Code: 400}, errors.New("invalid number of results per page")
 	}
 
 	queryWords := WordSplit(q)
@@ -38,11 +38,11 @@ func PerformSearch(q string, page string, resultsPerPage string) (r SearchRespon
 	// Search the index and calculate scores
 	results, err := SearchIndex(queryWords, intPage, intResultsPerPage)
 	if err != nil {
-		return SearchResponse{Code: 500}, errors.New("error fetching documents")
+		return model.SearchResponse{Code: 500}, errors.New("error fetching documents")
 	}
 
 	// Store search results in cache
 	cache.Set(cacheKey, results)
 
-	return SearchResponse{Code: 200, Results: results}, nil
+	return model.SearchResponse{Code: 200, Results: results}, nil
 }

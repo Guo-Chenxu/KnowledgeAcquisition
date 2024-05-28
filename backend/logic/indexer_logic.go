@@ -1,7 +1,7 @@
-package query_process
+package logic
 
 import (
-	. "MariaInfoRetrieval/maria_types"
+	"KnowledgeAcquisition/model"
 	"errors"
 	"math"
 	"sort"
@@ -12,13 +12,13 @@ import (
 )
 
 type DocumentVector struct {
-	Doc    Document
+	Doc    model.Document
 	Vector map[string]float64
 }
 
 var index = make(map[string][]DocumentVector)
-var idDocMap = make(map[string]Document)
-var docs []Document
+var idDocMap = make(map[string]model.Document)
+var docs []model.Document
 var idfMap = make(map[string]float64) // To hold IDF values of all terms
 var epsilon = 1e-10
 
@@ -33,12 +33,12 @@ func isStopWord(word string) bool {
 }
 
 // Build the index and calculate the IDF for all terms
-func BuildIndex(documents []Document) {
+func BuildIndex(documents []model.Document) {
 	// Store documents
 	docs = documents
 
 	totalDocs := float64(len(documents))
-	docIndex := make(map[string][]Document)
+	docIndex := make(map[string][]model.Document)
 
 	log.Info("Number of documents loaded:", totalDocs)
 
@@ -79,7 +79,7 @@ func BuildIndex(documents []Document) {
 
 }
 
-func buildDocumentVector(doc Document) DocumentVector {
+func buildDocumentVector(doc model.Document) DocumentVector {
 	vector := make(map[string]float64)
 	words := WordSplit(doc.Keywords)
 	wordCount := float64(len(words))
@@ -114,8 +114,8 @@ func buildDocumentVector(doc Document) DocumentVector {
 	return DocumentVector{Doc: doc, Vector: vector}
 }
 
-func buildSummaryDocument(doc Document) SummaryDocument {
-	summaryDoc := SummaryDocument{
+func buildSummaryDocument(doc model.Document) model.SummaryDocument {
+	summaryDoc := model.SummaryDocument{
 		Id:      doc.Id,
 		Title:   doc.Title,
 		URL:     doc.URL,
@@ -125,7 +125,7 @@ func buildSummaryDocument(doc Document) SummaryDocument {
 	return summaryDoc
 }
 
-func SearchIndex(queryWords []string, page, resultsPerPage int) ([]SearchResult, error) {
+func SearchIndex(queryWords []string, page, resultsPerPage int) ([]model.SearchResult, error) {
 	if len(queryWords) == 0 {
 		return nil, errors.New("empty query")
 	}
@@ -140,9 +140,9 @@ func SearchIndex(queryWords []string, page, resultsPerPage int) ([]SearchResult,
 	}
 	if magnigude == 0 {
 		log.Info("Query made up of words in every or no documents. Returning all documents.")
-		results := make([]SearchResult, 0, len(docs))
+		results := make([]model.SearchResult, 0, len(docs))
 		for _, doc := range docs {
-			results = append(results, SearchResult{Doc: buildSummaryDocument(doc), Score: 1.0})
+			results = append(results, model.SearchResult{Doc: buildSummaryDocument(doc), Score: 1.0})
 		}
 
 		return results, nil
@@ -229,7 +229,7 @@ func SearchIndex(queryWords []string, page, resultsPerPage int) ([]SearchResult,
 	}()
 
 	// Collect the results
-	scoreMap := make(map[string]*SearchResult)
+	scoreMap := make(map[string]*model.SearchResult)
 	for id, scoresChan := range scoresChansMap {
 		totalScore := 0.0
 		for score := range scoresChan {
@@ -243,7 +243,7 @@ func SearchIndex(queryWords []string, page, resultsPerPage int) ([]SearchResult,
 
 		// Build document summary
 		summaryDoc := buildSummaryDocument(idDocMap[id])
-		scoreMap[id] = &SearchResult{Doc: summaryDoc, Score: totalScore}
+		scoreMap[id] = &model.SearchResult{Doc: summaryDoc, Score: totalScore}
 	}
 
 	log.Info(len(scoreMap), " results")
@@ -254,7 +254,7 @@ func SearchIndex(queryWords []string, page, resultsPerPage int) ([]SearchResult,
 	log.Debug("<<< scoreMap")
 
 	// Convert the scoreMap to a slice
-	results := make([]SearchResult, 0, len(scoreMap))
+	results := make([]model.SearchResult, 0, len(scoreMap))
 	for _, result := range scoreMap {
 		results = append(results, *result)
 	}
@@ -279,7 +279,7 @@ func SearchIndex(queryWords []string, page, resultsPerPage int) ([]SearchResult,
 	return results, nil
 }
 
-func GetFullDoc(id string) (Document, bool) {
+func GetFullDoc(id string) (model.Document, bool) {
 	doc, ok := idDocMap[id]
 	return doc, ok
 }
