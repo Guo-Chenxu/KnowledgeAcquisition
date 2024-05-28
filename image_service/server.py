@@ -7,11 +7,6 @@ import image_detection
 from collections import Counter
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-# import tensorflow as tf
-
-# config = tf.compat.v1.ConfigProto(
-#     gpu_options=tf.compat.v1.GPUOptions(allow_growth=True))
-# sess = tf.compat.v1.Session(config=config)
 
 app = Flask(__name__)
 log = app.logger
