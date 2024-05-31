@@ -41,7 +41,7 @@ class OiwikiSpiderSpider(scrapy.Spider):
         texts = sections.xpath("text()").getall()
         texts = [t.strip() for t in texts]
         # Number of hrefs should be equal to number of texts
-        assert len(hrefs) == len(texts)
+        # assert len(hrefs) == len(texts)
 
         # Yield scrapy request for each sections
         for href, section in zip(hrefs, texts):

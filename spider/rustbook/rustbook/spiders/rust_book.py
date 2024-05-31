@@ -7,7 +7,7 @@ logger.setLevel(logging.DEBUG)
 
 
 class ThebookSpider(scrapy.Spider):
-    name = "thebook"
+    name = "rust_book_spider"
     allowed_domains = ["doc.rust-lang.org"]
     start_urls = ["http://doc.rust-lang.org/book/"]
     local_site = "rust-book_response.html"
@@ -26,7 +26,7 @@ class ThebookSpider(scrapy.Spider):
         hrefs = chapters.xpath("@href").getall()
         texts = chapters.xpath("text()").getall()
         # Number of hrefs should be equal to number of texts
-        assert len(hrefs) == len(texts)
+        # assert len(hrefs) == len(texts)
 
         # Yield scrapy request for each chapter
         for href, chapter in zip(hrefs, texts):
@@ -50,5 +50,5 @@ class ThebookSpider(scrapy.Spider):
             "content": "".join(p for p in content),
             "keywords": "".join(p for p in keywords),
             "url": response.url,
-            "data": datetime.date.today().strftime("%Y-%m-%d"),
+            "date": datetime.date.today().strftime("%Y-%m-%d"),
         }

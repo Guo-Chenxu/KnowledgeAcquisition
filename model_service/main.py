@@ -16,13 +16,10 @@ log.setLevel(logging.DEBUG)
 
 @app.route("/image_to_keywords", methods=["POST"])
 def image_to_keywords():
-    # Check if the post request has the file part
     if "file" not in request.files:
         return "No file part", 400
     file = request.files["file"]
 
-    # if user does not select file, browser submits an empty part without
-    # filename
     if file.filename == "":
         return "No selected file", 400
     log.info(file.filename)
@@ -52,7 +49,7 @@ def extract_info():
     # Extract hot words
     stop_words = (
         set(stopwords.words("english")) if language == "en" else set()
-    )  # Add Chinese stopwords if needed
+    )  
     word_tokens = word_tokenize(text)
     words = [
         w for w in word_tokens if not w in stop_words and not w in punctuation

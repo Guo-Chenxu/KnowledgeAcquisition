@@ -60,7 +60,7 @@ def image_to_keywords(file: str) -> tuple[str, int]:
     try:
         preds = model.predict(x)
         predictions = decode_predictions(preds, top=5)[0]
-        # Return top three predictions or all if predictions are less than three
+        
         if len(predictions) >= 3:
             keywords = [pred[1] for pred in predictions[:3]]
         else:
