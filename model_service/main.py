@@ -7,6 +7,7 @@ import image_detection
 from collections import Counter
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+import re
 
 app = Flask(__name__)
 log = app.logger
@@ -64,6 +65,34 @@ def extract_info():
     entities = {k: v for k, v in entities.items() if v > 1}
 
     jsonResponse = json.dumps({"entities": entities, "hot_words": hot_words})
+    log.debug(jsonResponse)
+    return jsonResponse
+    
+@app.route("/extract_info_regex", methods=["POST"])
+def extract_info():
+    data = request.get_json()
+    text = data.get("text")
+    pattern = data.get("pattern")
+    language = data.get("language")
+    word_class = data.get("word_class")
+
+    if not text or not language:
+        return "Invalid request: no text or no language", 400
+
+    if language not in ["en", "cn"]:
+        return "Unsupported language: " + language, 400
+
+    # Entity detection
+    entities = entity_detection.entity_detect(text, language)
+
+    # Extract words with regex
+    words = []
+    entities = [{"text": item["text"], "label": item["label"]} for item in entities]
+    for entity in entities:
+        if word_class == entity.get("label") and bool(re.fullmatch(pattern=pattern,string=entity.get('text'))):
+            words.append(entity.get('text'))
+
+    jsonResponse = json.dumps({"words": words})
     log.debug(jsonResponse)
     return jsonResponse
 

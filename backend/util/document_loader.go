@@ -18,7 +18,6 @@ func LoadDocuments(dir string) ([]Document, error) {
 	var documents []Document
 
 	for _, file := range files {
-		// Ignore files whose filename are not ended with .json extension
 		if filepath.Ext(file.Name()) != ".json" {
 			continue
 		}
@@ -36,7 +35,6 @@ func LoadDocuments(dir string) ([]Document, error) {
 			return nil, err
 		}
 
-		// Set language of documents
 		setLang(docs, filename)
 
 		documents = append(documents, docs...)
@@ -44,14 +42,10 @@ func LoadDocuments(dir string) ([]Document, error) {
 		f.Close()
 	}
 
-	// Convert document from escaped Unicode format to Unicode format
 	for id, doc := range documents {
-		// Reindex documents to avoid duplicate id
 		doc.Id = strconv.Itoa(id)
-		// Convert title
 		sTitle := strconv.QuoteToASCII(doc.Title)
 		doc.Title = sTitle[1 : len(sTitle)-1]
-		// Convert content
 		sUnicode := strconv.QuoteToASCII(doc.Content)
 		doc.Content = sUnicode[1 : len(sUnicode)-1]
 	}

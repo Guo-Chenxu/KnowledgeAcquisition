@@ -6,7 +6,6 @@ import (
 	"sync"
 )
 
-// Simple in-memory cache
 type Cache struct {
 	Mu        sync.Mutex
 	Cache     map[string]*list.Element
@@ -19,7 +18,6 @@ type Entry struct {
 	value []model.SearchResult
 }
 
-// Create a new cache
 func NewCache(capacity int) *Cache {
 	return &Cache{
 		Cache:     make(map[string]*list.Element),
@@ -28,7 +26,6 @@ func NewCache(capacity int) *Cache {
 	}
 }
 
-// Retrieve an item from cache
 func (c *Cache) Get(key string) ([]model.SearchResult, bool) {
 	c.Mu.Lock()
 	defer c.Mu.Unlock()
@@ -45,14 +42,12 @@ func (c *Cache) Set(key string, val []model.SearchResult) {
 	c.Mu.Lock()
 	defer c.Mu.Unlock()
 
-	// If key hit in cache, move it to the front of LRU Cache
 	if ent, ok := c.Cache[key]; ok {
 		c.evictList.MoveToFront(ent)
 		ent.Value.(*Entry).value = val
 		return
 	}
 
-	// Remove Least recently used item from LRU Cache
 	if c.evictList.Len() >= c.capacity {
 		ent := c.evictList.Back()
 		if ent != nil {
@@ -60,7 +55,6 @@ func (c *Cache) Set(key string, val []model.SearchResult) {
 		}
 	}
 
-	// Create new entry and add to LRU Cache
 	ent := &Entry{key: key, value: val}
 	element := c.evictList.PushFront(ent)
 	c.Cache[key] = element

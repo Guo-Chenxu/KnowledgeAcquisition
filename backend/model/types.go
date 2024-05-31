@@ -15,6 +15,10 @@ type DocumentAbstract struct {
 	HotWords map[string]int `json:"hot_words"`
 }
 
+type DocumentExtractRegex struct {
+	Words []string `json:"words"`
+}
+
 type SummaryDocument struct {
 	Id      string `json:"id"`
 	Title   string `json:"title"`
@@ -28,20 +32,17 @@ type SearchResult struct {
 	Doc   SummaryDocument
 }
 
-// Struct of feedback
 type Feedback struct {
 	ResultId string `json:"resultId"`
 	Score    int    `json:"Score"`
 }
 
-// Struct of entity feedback
 type EntityFeedback struct {
 	ResultId string `json:"resultId"`
 	Entity   string `json:"item"`
 	Score    int    `json:"score"`
 }
 
-// Struct of PerformSearch's response
 type SearchResponse struct {
 	Code    int            `json:"code"`
 	Results []SearchResult `json:"results"`
