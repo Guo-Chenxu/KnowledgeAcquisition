@@ -2,11 +2,11 @@ import datetime
 import scrapy
 import logging
 
-logger = logging.getLogger("ThebookSpider")
+logger = logging.getLogger("RustbookSpider")
 logger.setLevel(logging.DEBUG)
 
 
-class ThebookSpider(scrapy.Spider):
+class RustbookSpider(scrapy.Spider):
     name = "rust_book_spider"
     allowed_domains = ["doc.rust-lang.org"]
     start_urls = ["http://doc.rust-lang.org/book/"]
