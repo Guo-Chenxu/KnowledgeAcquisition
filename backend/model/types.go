@@ -48,6 +48,11 @@ type SearchResponse struct {
 	Results []SearchResult `json:"results"`
 }
 
+type SearchImageResponse struct {
+	Results  []SearchResult `json:"results"`
+	Keywords string       `json:"keywords"`
+}
+
 type Language int8
 
 const (

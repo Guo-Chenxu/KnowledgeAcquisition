@@ -1,0 +1,310 @@
+basePath: /api/v1
+definitions:
+  model.Document:
+    properties:
+      content:
+        type: string
+      date:
+        type: string
+      id:
+        type: string
+      keywords:
+        type: string
+      lang:
+        $ref: '#/definitions/model.Language'
+      title:
+        type: string
+      url:
+        type: string
+    type: object
+  model.DocumentAbstract:
+    properties:
+      entities:
+        additionalProperties:
+          type: integer
+        type: object
+      hot_words:
+        additionalProperties:
+          type: integer
+        type: object
+    type: object
+  model.DocumentExtractRegex:
+    properties:
+      words:
+        items:
+          type: string
+        type: array
+    type: object
+  model.EntityFeedback:
+    properties:
+      item:
+        type: string
+      resultId:
+        type: string
+      score:
+        type: integer
+    type: object
+  model.Feedback:
+    properties:
+      Score:
+        type: integer
+      resultId:
+        type: string
+    type: object
+  model.Language:
+    enum:
+    - 0
+    - 1
+    type: integer
+    x-enum-varnames:
+    - English
+    - Chinese
+  model.SearchImageResponse:
+    properties:
+      keywords:
+        type: string
+      results:
+        items:
+          $ref: '#/definitions/model.SearchResult'
+        type: array
+    type: object
+  model.SearchResponse:
+    properties:
+      code:
+        type: integer
+      results:
+        items:
+          $ref: '#/definitions/model.SearchResult'
+        type: array
+    type: object
+  model.SearchResult:
+    properties:
+      doc:
+        $ref: '#/definitions/model.SummaryDocument'
+      score:
+        type: number
+    type: object
+  model.SummaryDocument:
+    properties:
+      content:
+        type: string
+      date:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+      url:
+        type: string
+    type: object
+host: 10.29.12.98:9011
+info:
+  contact: {}
+  description: 信息知识获取后端接口
+  title: 信息知识获取
+  version: "1.0"
+paths:
+  /document:
+    get:
+      description: 根据关键词分页查询查询
+      parameters:
+      - description: 文档id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Document'
+      summary: 获取文档详细信息
+      tags:
+      - 查询接口
+  /entity_feedback:
+    post:
+      consumes:
+      - application/json
+      description: 对实体类进行反馈
+      parameters:
+      - description: 反馈参数
+        in: body
+        name: feedback
+        required: true
+        schema:
+          $ref: '#/definitions/model.EntityFeedback'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 实体反馈
+      tags:
+      - 反馈接口
+  /extract_info:
+    get:
+      description: 对查询到的结果提取实体和关键词
+      parameters:
+      - description: 文档id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.DocumentAbstract'
+      summary: 提取关键信息
+      tags:
+      - 提取接口
+  /extract_info_regex:
+    get:
+      description: 对查询到的结果通过正则和词性提取指定信息点
+      parameters:
+      - description: 文档id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: 正则表达式
+        in: query
+        name: pattern
+        required: true
+        type: string
+      - description: 词性
+        in: query
+        name: word_class
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.DocumentExtractRegex'
+      summary: 提取关键信息
+      tags:
+      - 提取接口
+  /extract_info_regex_feedback:
+    post:
+      consumes:
+      - application/json
+      description: 对正则提取结果进行反馈
+      parameters:
+      - description: 反馈参数
+        in: body
+        name: feedback
+        required: true
+        schema:
+          $ref: '#/definitions/model.EntityFeedback'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 正则提取反馈
+      tags:
+      - 反馈接口
+  /feedback:
+    post:
+      consumes:
+      - application/json
+      description: 对结果进行反馈
+      parameters:
+      - description: 反馈参数
+        in: body
+        name: feedback
+        required: true
+        schema:
+          $ref: '#/definitions/model.Feedback'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 结果反馈
+      tags:
+      - 反馈接口
+  /hotword_feedback:
+    post:
+      consumes:
+      - application/json
+      description: 对热词进行反馈
+      parameters:
+      - description: 反馈参数
+        in: body
+        name: feedback
+        required: true
+        schema:
+          $ref: '#/definitions/model.EntityFeedback'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 热词反馈
+      tags:
+      - 反馈接口
+  /search:
+    get:
+      description: 根据关键词分页查询查询
+      parameters:
+      - description: 查询参数
+        in: query
+        name: q
+        required: true
+        type: string
+      - description: 页数
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 每页大小
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SearchResponse'
+      summary: 分页查询
+      tags:
+      - 查询接口
+  /search_by_image:
+    post:
+      description: 根据关键词分页查询查询
+      parameters:
+      - description: 查询照片
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SearchImageResponse'
+      summary: 上传图片查询
+      tags:
+      - 查询接口
+swagger: "2.0"

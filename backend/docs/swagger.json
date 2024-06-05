@@ -1,0 +1,473 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "信息知识获取后端接口",
+        "title": "信息知识获取",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "10.29.12.98:9011",
+    "basePath": "/api/v1",
+    "paths": {
+        "/document": {
+            "get": {
+                "description": "根据关键词分页查询查询",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "查询接口"
+                ],
+                "summary": "获取文档详细信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "文档id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Document"
+                        }
+                    }
+                }
+            }
+        },
+        "/entity_feedback": {
+            "post": {
+                "description": "对实体类进行反馈",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "反馈接口"
+                ],
+                "summary": "实体反馈",
+                "parameters": [
+                    {
+                        "description": "反馈参数",
+                        "name": "feedback",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.EntityFeedback"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/extract_info": {
+            "get": {
+                "description": "对查询到的结果提取实体和关键词",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "提取接口"
+                ],
+                "summary": "提取关键信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "文档id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.DocumentAbstract"
+                        }
+                    }
+                }
+            }
+        },
+        "/extract_info_regex": {
+            "get": {
+                "description": "对查询到的结果通过正则和词性提取指定信息点",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "提取接口"
+                ],
+                "summary": "提取关键信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "文档id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "正则表达式",
+                        "name": "pattern",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "词性",
+                        "name": "word_class",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.DocumentExtractRegex"
+                        }
+                    }
+                }
+            }
+        },
+        "/extract_info_regex_feedback": {
+            "post": {
+                "description": "对正则提取结果进行反馈",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "反馈接口"
+                ],
+                "summary": "正则提取反馈",
+                "parameters": [
+                    {
+                        "description": "反馈参数",
+                        "name": "feedback",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.EntityFeedback"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/feedback": {
+            "post": {
+                "description": "对结果进行反馈",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "反馈接口"
+                ],
+                "summary": "结果反馈",
+                "parameters": [
+                    {
+                        "description": "反馈参数",
+                        "name": "feedback",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Feedback"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/hotword_feedback": {
+            "post": {
+                "description": "对热词进行反馈",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "反馈接口"
+                ],
+                "summary": "热词反馈",
+                "parameters": [
+                    {
+                        "description": "反馈参数",
+                        "name": "feedback",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.EntityFeedback"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/search": {
+            "get": {
+                "description": "根据关键词分页查询查询",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "查询接口"
+                ],
+                "summary": "分页查询",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "查询参数",
+                        "name": "q",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页数",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.SearchResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/search_by_image": {
+            "post": {
+                "description": "根据关键词分页查询查询",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "查询接口"
+                ],
+                "summary": "上传图片查询",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "查询照片",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.SearchImageResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Document": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "keywords": {
+                    "type": "string"
+                },
+                "lang": {
+                    "$ref": "#/definitions/model.Language"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.DocumentAbstract": {
+            "type": "object",
+            "properties": {
+                "entities": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "hot_words": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "model.DocumentExtractRegex": {
+            "type": "object",
+            "properties": {
+                "words": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "model.EntityFeedback": {
+            "type": "object",
+            "properties": {
+                "item": {
+                    "type": "string"
+                },
+                "resultId": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.Feedback": {
+            "type": "object",
+            "properties": {
+                "Score": {
+                    "type": "integer"
+                },
+                "resultId": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Language": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "x-enum-varnames": [
+                "English",
+                "Chinese"
+            ]
+        },
+        "model.SearchImageResponse": {
+            "type": "object",
+            "properties": {
+                "keywords": {
+                    "type": "string"
+                },
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SearchResult"
+                    }
+                }
+            }
+        },
+        "model.SearchResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SearchResult"
+                    }
+                }
+            }
+        },
+        "model.SearchResult": {
+            "type": "object",
+            "properties": {
+                "doc": {
+                    "$ref": "#/definitions/model.SummaryDocument"
+                },
+                "score": {
+                    "type": "number"
+                }
+            }
+        },
+        "model.SummaryDocument": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
