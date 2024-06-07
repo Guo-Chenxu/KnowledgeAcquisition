@@ -86,3 +86,5 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+upload_images/
