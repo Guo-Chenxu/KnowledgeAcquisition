@@ -66,7 +66,7 @@ def extract_info():
     return jsonResponse
     
 @app.route("/extract_info_regex", methods=["POST"])
-def extract_info():
+def extract_info_regex():
     data = request.get_json()
     text = data.get("text")
     pattern = data.get("pattern")

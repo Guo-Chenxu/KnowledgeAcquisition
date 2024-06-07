@@ -1,5 +1,9 @@
 import spacy
 import jieba.posseg as pseg
+import os
+
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"] = "7"
 
 # Initialize English and Chinese NLP pipelines
 nlp_en = spacy.load("en_core_web_sm")
