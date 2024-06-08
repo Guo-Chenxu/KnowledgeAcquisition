@@ -1,25 +1,27 @@
 package logic
 
 import (
-	"fmt"
 	"runtime/debug"
 	"strings"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/yanyiwu/gojieba"
 )
 
 var seg *gojieba.Jieba = gojieba.NewJieba()
 
+var stopWords = []string{" ", "\n", "\t"}
+
 func WordSplit(query string) []string {
 	defer func() {
 		if panicInfo := recover(); panicInfo != nil {
-			fmt.Printf("%v, %s", panicInfo, string(debug.Stack()))
+			log.Errorf("%v, %s", panicInfo, string(debug.Stack()))
 		}
 	}()
 
-	words := seg.Cut(query, true) // Use Jeba for Chinese text segment
+	words := seg.Cut(query, true)
 
-	words = whitespaceFilter(words)
+	words = filter(words, stopWords)
 	for i := range words {
 		words[i] = strings.TrimSpace(words[i])
 
@@ -28,8 +30,8 @@ func WordSplit(query string) []string {
 	return words
 }
 
-func filter(slice []string, unwanted ...string) []string {
-	unwantedSet := make(map[string]struct{}, len(unwanted))
+func filter(slice []string, unwanted []string) []string {
+	unwantedSet := make(map[string]any, len(unwanted))
 	for _, s := range unwanted {
 		unwantedSet[s] = struct{}{}
 	}
@@ -42,9 +44,4 @@ func filter(slice []string, unwanted ...string) []string {
 	}
 
 	return result
-}
-
-func whitespaceFilter(slice []string) []string {
-	unwanted := []string{" ", "\t"}
-	return filter(slice, unwanted...)
 }

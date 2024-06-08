@@ -18,6 +18,15 @@ func init() {
 	log.SetFormatter(&log.TextFormatter{})
 	log.SetOutput(os.Stdout)
 	log.SetLevel(log.DebugLevel)
+
+	// Load and index documents
+	docs, err := util.LoadDocuments("./data")
+	if err != nil {
+		log.Errorf("Failed to load documents: %v", err)
+		return
+	}
+	logic.BuildIndex(docs)
+	log.Info("Indexing completed")
 }
 
 // @title 信息知识获取
@@ -31,14 +40,6 @@ func main() {
 	r.Use(cors.Default())
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-	// Load and index documents
-	docs, err := util.LoadDocuments("./data")
-	if err != nil {
-		log.Errorf("Failed to load documents: %v", err)
-		return
-	}
-	logic.BuildIndex(docs)
 
 	v1 := r.Group("/api/v1")
 	{

@@ -19,7 +19,7 @@ type KeywordResponse struct {
 	Keyword string `json:"keyword"`
 }
 
-func GetKeywordsFromImage(imagePath string) (string, error) {
+func SearchByImageLogic(imagePath string) (string, error) {
 	var b bytes.Buffer
 	w := multipart.NewWriter(&b)
 	f, err := os.Open(imagePath)

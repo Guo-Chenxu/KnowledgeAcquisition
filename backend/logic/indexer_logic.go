@@ -22,12 +22,12 @@ var docs []model.Document
 var idfMap = make(map[string]float64)
 var epsilon = 1e-10
 
-var stopWords = map[string]struct{}{
+var stopWordMap = map[string]struct{}{
 	"_": {}, ",": {}, ".": {},
 }
 
 func isStopWord(word string) bool {
-	_, ok := stopWords[word]
+	_, ok := stopWordMap[word]
 	return ok
 }
 
@@ -94,6 +94,7 @@ func buildDocumentVector(doc model.Document) DocumentVector {
 		magnitude += tfIdf * tfIdf
 	}
 
+	// 归一化
 	if magnitude > 0.0 {
 		sqrtMagnitude := math.Sqrt(magnitude + epsilon)
 		for word := range vector {

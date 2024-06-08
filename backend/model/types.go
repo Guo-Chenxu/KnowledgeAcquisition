@@ -27,6 +27,10 @@ type SummaryDocument struct {
 	Date    string `json:"date"`
 }
 
+var ResultWeight map[string]float64
+
+var ResultWordsWeight map[string]map[string]float64
+
 type SearchResult struct {
 	Score float64
 	Doc   SummaryDocument
@@ -50,7 +54,7 @@ type SearchResponse struct {
 
 type SearchImageResponse struct {
 	Results  []SearchResult `json:"results"`
-	Keywords string       `json:"keywords"`
+	Keywords string         `json:"keywords"`
 }
 
 type Language int8

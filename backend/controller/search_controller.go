@@ -40,7 +40,7 @@ func SearchByImage(c *gin.Context) {
 	dst := "./upload_images/" + file.Filename
 	c.SaveUploadedFile(file, dst)
 
-	keywords, err := logic.GetKeywordsFromImage(dst)
+	keywords, err := logic.SearchByImageLogic(dst)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return

@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"KnowledgeAcquisition/logic"
 	"KnowledgeAcquisition/model"
+
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
@@ -20,9 +22,10 @@ func Feedback(c *gin.Context) {
 		c.JSON(400, gin.H{"error": "Failed to parse request body: " + err.Error()})
 		return
 	}
-	
+
 	log.Infof("Received feedback: %v", feedback)
-	
+	logic.ResultFeedbackLogic(feedback)
+
 	c.JSON(200, gin.H{"message": "Feedback received successfully"})
 }
 
@@ -40,9 +43,10 @@ func EntityFeedback(c *gin.Context) {
 		c.JSON(400, gin.H{"error": "Failed to parse request body: " + err.Error()})
 		return
 	}
-	
+
 	log.Infof("Received feedback: %v", feedback)
-	
+	logic.ResultWordsFeedbackLogic(feedback)
+
 	c.JSON(200, gin.H{"message": "Feedback received successfully"})
 }
 
@@ -60,9 +64,10 @@ func HotwordFeedback(c *gin.Context) {
 		c.JSON(400, gin.H{"error": "Failed to parse request body: " + err.Error()})
 		return
 	}
-	
+
 	log.Infof("Received feedback: %v", feedback)
-	
+	logic.ResultWordsFeedbackLogic(feedback)
+
 	c.JSON(200, gin.H{"message": "Feedback received successfully"})
 }
 
@@ -80,8 +85,9 @@ func ExtractInfoRegexFeedback(c *gin.Context) {
 		c.JSON(400, gin.H{"error": "Failed to parse request body: " + err.Error()})
 		return
 	}
-	
+
 	log.Infof("Received feedback: %v", feedback)
-	
+	logic.ResultWordsFeedbackLogic(feedback)
+
 	c.JSON(200, gin.H{"message": "Feedback for " + feedback.Entity + "received successfully"})
 }
