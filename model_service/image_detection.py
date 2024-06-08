@@ -1,3 +1,4 @@
+
 import json
 import io
 from keras.applications.resnet import (
@@ -11,10 +12,9 @@ from PIL import Image
 import numpy as np
 import logging
 import tensorflow as tf
-import os
+from tensorflow.python.client import device_lib
 
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = "7"
+print(device_lib.list_local_devices())
 
 config = tf.compat.v1.ConfigProto(
     gpu_options=tf.compat.v1.GPUOptions(allow_growth=True))
