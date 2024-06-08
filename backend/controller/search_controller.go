@@ -18,7 +18,7 @@ import (
 // @Success 200 {object} model.SearchResponse
 // @Router /search [get]
 func Search(c *gin.Context) {
-	result, err := logic.PerformSearch(c.Query("q"), c.Query("page"),
+	result, err := logic.Search(c.Query("q"), c.Query("page"),
 		c.DefaultQuery("limit", strconv.Itoa(model.DEAFULT_RESULT_PER_PAGE)))
 	if err != nil {
 		c.JSON(result.Code, err.Error())
@@ -46,7 +46,7 @@ func SearchByImage(c *gin.Context) {
 		return
 	}
 
-	result, err := logic.PerformSearch(keywords, strconv.Itoa(1),
+	result, err := logic.Search(keywords, strconv.Itoa(1),
 		strconv.Itoa(model.DEAFULT_RESULT_PER_PAGE))
 	if err != nil {
 		c.JSON(result.Code, err.Error())

@@ -12,7 +12,7 @@ import (
 var cache_capacity = 10
 var cache = NewCache(cache_capacity)
 
-func PerformSearch(q string, page string, resultsPerPage string) (r model.SearchResponse, err error) {
+func Search(q string, page string, resultsPerPage string) (r model.SearchResponse, err error) {
 	cacheKey := fmt.Sprintf("%s-%s-%s", q, page, resultsPerPage)
 
 	if cachedResults, found := cache.Get(cacheKey); found {
