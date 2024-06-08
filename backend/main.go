@@ -53,7 +53,7 @@ func main() {
 		// Entities and hot words
 		v1.GET("/extract_info", controller.ExtractInfo)
 		// Entity and hot word feedback
-		v1.POST("/extract_info_regex", controller.ExtractInfoRegex)
+		v1.GET("/extract_info_regex", controller.ExtractInfoRegex)
 
 		// Feedback
 		v1.POST("/feedback", controller.Feedback)
