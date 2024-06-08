@@ -116,7 +116,7 @@ const docTemplate = `{
                 "tags": [
                     "提取接口"
                 ],
-                "summary": "提取关键信息",
+                "summary": "提取关键信息（正则+词性）",
                 "parameters": [
                     {
                         "type": "string",

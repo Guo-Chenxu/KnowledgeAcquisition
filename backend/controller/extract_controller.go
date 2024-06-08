@@ -24,7 +24,7 @@ func ExtractInfo(c *gin.Context) {
 	c.JSON(200, result)
 }
 
-// @Summary 提取关键信息
+// @Summary 提取关键信息（正则+词性）
 // @Description 对查询到的结果通过正则和词性提取指定信息点
 // @Tags 提取接口
 // @Produce application/json
