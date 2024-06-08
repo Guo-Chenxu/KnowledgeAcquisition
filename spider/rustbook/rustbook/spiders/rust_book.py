@@ -25,10 +25,7 @@ class RustbookSpider(scrapy.Spider):
         )
         hrefs = chapters.xpath("@href").getall()
         texts = chapters.xpath("text()").getall()
-        # Number of hrefs should be equal to number of texts
-        # assert len(hrefs) == len(texts)
 
-        # Yield scrapy request for each chapter
         for href, chapter in zip(hrefs, texts):
             url = response.urljoin(href)
             yield scrapy.Request(
@@ -38,7 +35,6 @@ class RustbookSpider(scrapy.Spider):
             )
 
     def parse_chapter(self, response, chapter="Unknown"):
-        # Scrawl chapter content
         content = response.xpath("//main/*")
         keywords = content.xpath("text()").getall()
         content = content.getall()

@@ -40,10 +40,7 @@ class OiwikiSpiderSpider(scrapy.Spider):
         hrefs = sections.xpath("@href").getall()
         texts = sections.xpath("text()").getall()
         texts = [t.strip() for t in texts]
-        # Number of hrefs should be equal to number of texts
-        # assert len(hrefs) == len(texts)
-
-        # Yield scrapy request for each sections
+        
         for href, section in zip(hrefs, texts):
             url = response.urljoin(href)
             yield scrapy.Request(
@@ -53,7 +50,6 @@ class OiwikiSpiderSpider(scrapy.Spider):
             )
 
     def parse_section(self, response, section="Unknown"):
-        # Scrawl section content
         content = response.xpath(
             '//div[@class="md-content"]//blockquote[1]/preceding-sibling::*[not(self::a)]'
         ).getall()
