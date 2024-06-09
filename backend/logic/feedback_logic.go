@@ -13,23 +13,30 @@ func init() {
 }
 
 func ResultFeedbackLogic(feedback model.Feedback) {
-	w, ok := model.ResultWeight[feedback.ResultId]
-	if ok {
-		model.ResultWeight[feedback.ResultId] = w + float64(feedback.Score)
-	} else {
-		model.ResultWeight[feedback.ResultId] = 1 + float64(feedback.Score)
-	}
+	model.ResultWeight[feedback.ResultId] = GetResultWeight(feedback.ResultId) + float64(feedback.Score)
 }
 
 func ResultWordsFeedbackLogic(feedback model.EntityFeedback) {
-	m, ok := model.ResultWordsWeight[feedback.ResultId]
-	if ok {
-		if w, ok := m[feedback.Entity]; ok {
-			model.ResultWordsWeight[feedback.ResultId][feedback.Entity] = w + float64(feedback.Score)
+	model.ResultWordsWeight[feedback.ResultId][feedback.Entity] = GetResultWordsWeight(feedback.ResultId, feedback.Entity) + float64(feedback.Score)
+}
+
+func GetResultWeight(id string) float64 {
+	if w, ok := model.ResultWeight[id]; ok {
+		return w
+	} else {
+		return 1
+	}
+}
+
+func GetResultWordsWeight(id string, word string) float64 {
+	if m, ok := model.ResultWordsWeight[id]; ok {
+		if w, ok := m[word]; ok {
+			return w
+		} else {
+			return 1
 		}
 	} else {
-		model.ResultWordsWeight[feedback.ResultId] = make(map[string]float64)
-		model.ResultWordsWeight[feedback.ResultId][feedback.Entity] = 1 + float64(feedback.Score)
+		model.ResultWordsWeight[id] = make(map[string]float64)
+		return 1
 	}
-
 }
