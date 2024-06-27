@@ -28,8 +28,6 @@ def en_entity_detect(text: str) -> str:
             {
                 "text": entity.text,
                 "label": entity.label_,
-                # "start": entity.start_char,
-                # "end": entity.end_char,
             }
         )
 
