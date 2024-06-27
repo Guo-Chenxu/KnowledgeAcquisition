@@ -141,13 +141,13 @@
                             hover
                             small
                             v-model="
-                              detailMap[result.Doc.id].hot_words[key].score
+                              regexMap[result.Doc.id].results[word].score
                             "
                             @input="
-                              handleHotwordFeedback(
+                              handleRegexFeedback(
                                 result.Doc.id,
-                                key,
-                                detailMap[result.Doc.id].hot_words[key].score
+                                word,
+                                regexMap[result.Doc.id].results[word].score
                               )
                             "
                           ></v-rating>
@@ -157,6 +157,58 @@
                   </template>
                 </v-simple-table>
               </div>
+              <v-row class="mt-1 pb-0">
+                <v-col cols="7" class="pb-0">
+                  <v-text-field
+                    v-model="regexMap[result.Doc.id].pattern"
+                    label="输入正则表达式"
+                    outlined
+                    dense
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="3" class="pb-0">
+                  <v-select
+                    :items="wordClasses"
+                    v-model="regexMap[result.Doc.id].wordClass"
+                    label="选择词性"
+                    dense
+                    outlined
+                  ></v-select>
+                </v-col>
+                <v-col cols="2" class="pb-0">
+                  <v-btn @click="searchByRegex(result.Doc.id)" color="primary">
+                    <span class="white--text">搜索</span>
+                  </v-btn>
+                </v-col>
+              </v-row>
+
+              <v-simple-table
+                dense
+                v-if="
+                  regexMap[result.Doc.id] &&
+                  Object.keys(regexMap[result.Doc.id].results).length > 0
+                "
+              >
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">关键词</th>
+                      <th class="text-left">评分</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="(details, word) in regexMap[result.Doc.id].results"
+                      :key="word"
+                    >
+                      <td>{{ word }}</td>
+                      <td>
+                        <v-rating dense hover small></v-rating>
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
             </v-card-text>
 
             <v-card-actions>
@@ -186,6 +238,17 @@ export default {
     imageFile: null, // 用于存储要上传的图片文件
     searchResults: [],
     detailMap: {},
+    regexMap: {},
+    wordClasses: [
+      { text: "人物", value: "PERSON" },
+      { text: "法律", value: "LAW" },
+      { text: "序数词", value: "ORDINAL" },
+      { text: "时间", value: "DATE" },
+      { text: "量词", value: "QUANTITY" },
+      { text: "地理位置", value: "GPE" },
+      { text: "产品", value: "PRODUCT" },
+      { text: "组织名", value: "ORG" },
+    ],
   }),
 
   methods: {
@@ -200,6 +263,16 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.searchResults = response.data;
+          // 初始化 regexMap
+          this.searchResults.forEach((result) => {
+            if (!this.regexMap[result.Doc.id]) {
+              this.$set(this.regexMap, result.Doc.id, {
+                pattern: "",
+                wordClass: "",
+                results: {},
+              });
+            }
+          });
         })
         .catch((error) => {
           console.error("Error during keyword search:", error);
@@ -224,6 +297,16 @@ export default {
         .then((response) => {
           this.searchResults = response.data.results;
           this.searchText = response.data.keywords;
+          // 初始化 regexMap
+          this.searchResults.forEach((result) => {
+            if (!this.regexMap[result.Doc.id]) {
+              this.$set(this.regexMap, result.Doc.id, {
+                pattern: "",
+                wordClass: "",
+                results: {},
+              });
+            }
+          });
         })
         .catch((error) => {
           console.error("Error during image search:", error);
@@ -271,6 +354,33 @@ export default {
           });
       }
     },
+    searchByRegex(id) {
+      if (!this.regexMap[id]) {
+        console.error("Regex search parameters not initialized.");
+        return;
+      }
+      const params = {
+        id,
+        pattern: this.regexMap[id].pattern,
+        word_class: this.regexMap[id].wordClass,
+      };
+      axios
+        .get("api/v1/extract_info_regex", { params })
+        .then((response) => {
+          // 使用 Set 进行去重
+          const uniqueWords = [...new Set(response.data.words)];
+          // 将去重后的关键词转化为需要的格式
+          const wordsWithScore = uniqueWords.reduce((acc, word) => {
+            acc[word] = { score: 0 }; // 默认评分为0
+            return acc;
+          }, {});
+          this.$set(this.regexMap[id], "results", wordsWithScore);
+        })
+        .catch((error) => {
+          console.error("Error during regex search:", error);
+        });
+    },
+
     handleEntityFeedback(resultId, item, score) {
       const payload = {
         item,
@@ -302,7 +412,21 @@ export default {
           console.error("Error sending hotword feedback", error);
         });
     },
-
+    handleRegexFeedback(resultId, word, score) {
+      const payload = {
+        item: word,
+        resultId: resultId,
+        score: score,
+      };
+      axios
+        .post(`api/v1/regex_feedback`, payload)
+        .then((response) => {
+          console.log("Regex Feedback sent successfully", response);
+        })
+        .catch((error) => {
+          console.error("Error sending regex feedback", error);
+        });
+    },
     handleOverallFeedback(resultId, score) {
       const payload = {
         resultId,
@@ -334,5 +458,8 @@ export default {
 }
 .mt-1 {
   margin-top: 10px !important;
+}
+.pb-0 {
+  padding-bottom: 0px !important;
 }
 </style>
